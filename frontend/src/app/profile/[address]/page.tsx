@@ -52,136 +52,146 @@ export default function ProfilePage() {
     };
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-8">
-            {/* Profile Header */}
-            <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-                <div className="flex items-start gap-6">
-                    {/* Avatar */}
-                    <div className="w-24 h-24 bg-primary-100 rounded-full flex items-center justify-center">
-                        <span className="text-primary-600 font-bold text-3xl">
-                            {address.slice(2, 4).toUpperCase()}
-                        </span>
-                    </div>
-
-                    {/* Info */}
-                    <div className="flex-1">
-                        <h1 className="text-3xl font-bold mb-2">Profile</h1>
-                        <ENSDisplay 
-                            address={address as `0x${string}`}
-                            showFull={true}
-                            className="text-gray-600 mb-4 font-mono text-sm"
-                        />
-
-                        {/* Stats */}
-                        <div className="flex gap-6">
-                            <div>
-                                <p className="text-2xl font-bold text-primary-600">
-                                    {profile.credentials.length}
-                                </p>
-                                <p className="text-sm text-gray-600">Credentials</p>
-                            </div>
-                            <div>
-                                <p className="text-2xl font-bold text-primary-600">
-                                    {profile.reputation.totalJobs}
-                                </p>
-                                <p className="text-sm text-gray-600">Jobs Completed</p>
-                            </div>
-                            <div>
-                                <p className="text-2xl font-bold text-primary-600">
-                                    {profile.reputation.averageRating}
-                                </p>
-                                <p className="text-sm text-gray-600">Rating</p>
-                            </div>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+            <div className="max-w-7xl mx-auto px-4 py-12">
+                {/* Profile Header */}
+                <div className="bg-white rounded-3xl shadow-xl p-10 mb-10 border border-gray-100">
+                    <div className="flex items-start gap-8">
+                        {/* Avatar */}
+                        <div className="w-32 h-32 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-3xl flex items-center justify-center shadow-lg">
+                            <span className="text-white font-black text-5xl">
+                                {address.slice(2, 4).toUpperCase()}
+                            </span>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-                {/* Credentials Section */}
-                <div className="bg-white rounded-lg shadow-md p-6">
-                    <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                        <FiAward className="text-primary-600" />
-                        Verified Credentials
-                    </h2>
-                    <div className="space-y-4">
-                        {profile.credentials.map((credential) => (
-                            <div
-                                key={credential.id}
-                                className="border border-gray-200 rounded-lg p-4 hover:border-primary-300 transition"
-                            >
-                                <div className="flex items-start justify-between">
-                                    <div className="flex-1">
-                                        <h3 className="font-semibold text-lg mb-2">{credential.skillName}</h3>
-                                        <VerifiedBadge 
-                                            hasCredential={credential.verified}
-                                            size="sm"
-                                            showText={false}
-                                        />
-                                        <p className="text-sm text-gray-500 mt-2">
-                                            Issued: {credential.issuedAt}
-                                        </p>
-                                        <p className="text-xs text-gray-400 truncate">
-                                            Issuer: {credential.issuer}
-                                        </p>
-                                    </div>
+                        {/* Info */}
+                        <div className="flex-1">
+                            <h1 className="text-4xl font-black mb-3 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                Profile
+                            </h1>
+                            <ENSDisplay 
+                                address={address as `0x${string}`}
+                                showFull={true}
+                                className="text-gray-600 mb-6 font-mono text-lg"
+                            />
+
+                            {/* Stats */}
+                            <div className="flex gap-8">
+                                <div className="bg-gradient-to-br from-indigo-50 to-purple-50 px-6 py-4 rounded-2xl">
+                                    <p className="text-4xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                        {profile.credentials.length}
+                                    </p>
+                                    <p className="text-sm font-bold text-gray-600 mt-1">Credentials</p>
+                                </div>
+                                <div className="bg-gradient-to-br from-green-50 to-emerald-50 px-6 py-4 rounded-2xl">
+                                    <p className="text-4xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                                        {profile.reputation.totalJobs}
+                                    </p>
+                                    <p className="text-sm font-bold text-gray-600 mt-1">Jobs Done</p>
+                                </div>
+                                <div className="bg-gradient-to-br from-yellow-50 to-orange-50 px-6 py-4 rounded-2xl">
+                                    <p className="text-4xl font-black bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+                                        {profile.reputation.averageRating}
+                                    </p>
+                                    <p className="text-sm font-bold text-gray-600 mt-1">Rating</p>
                                 </div>
                             </div>
-                        ))}
+                        </div>
                     </div>
                 </div>
 
-                {/* Reputation & History */}
-                <div className="space-y-6">
-                    {/* Reputation Card */}
-                    <div className="bg-white rounded-lg shadow-md p-6">
-                        <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                            <FiStar className="text-primary-600" />
-                            Reputation Score
+                <div className="grid md:grid-cols-2 gap-8">
+                    {/* Credentials Section */}
+                    <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                        <h2 className="text-3xl font-black mb-6 flex items-center gap-3">
+                            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center">
+                                <FiAward className="text-white text-xl" />
+                            </div>
+                            Verified Credentials
                         </h2>
-                        <div className="text-center mb-4">
-                            <div className="text-5xl font-bold text-primary-600 mb-2">
-                                {profile.reputation.averageRating}
-                            </div>
-                            <div className="text-yellow-500 text-3xl mb-2">★★★★★</div>
-                            <p className="text-gray-600">
-                                Based on {profile.reputation.totalJobs} completed jobs
-                            </p>
-                        </div>
-                        <div className="border-t pt-4">
-                            <div className="flex justify-between text-sm">
-                                <span className="text-gray-600">Total Score</span>
-                                <span className="font-semibold">{profile.reputation.totalScore}</span>
-                            </div>
-                            <div className="flex justify-between text-sm mt-2">
-                                <span className="text-gray-600">Jobs Completed</span>
-                                <span className="font-semibold">{profile.reputation.totalJobs}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Completed Jobs */}
-                    <div className="bg-white rounded-lg shadow-md p-6">
-                        <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                            <FiBriefcase className="text-primary-600" />
-                            Recent Jobs
-                        </h2>
-                        <div className="space-y-3">
-                            {profile.completedJobs.map((job) => (
+                        <div className="space-y-4">
+                            {profile.credentials.map((credential) => (
                                 <div
-                                    key={job.id}
-                                    className="border-l-4 border-green-500 pl-4 py-2"
+                                    key={credential.id}
+                                    className="border-2 border-gray-100 rounded-2xl p-6 hover:border-indigo-200 hover:shadow-lg transition-all"
                                 >
-                                    <h3 className="font-semibold">{job.title}</h3>
-                                    <p className="text-xs text-gray-500">
-                                        Completed: {job.completedAt}
-                                    </p>
-                                    <div className="flex items-center gap-1 mt-1">
-                                        <span className="text-yellow-500">★</span>
-                                        <span className="font-semibold text-sm">{job.rating}/5</span>
+                                    <div className="flex items-start justify-between">
+                                        <div className="flex-1">
+                                            <h3 className="font-bold text-xl mb-3">{credential.skillName}</h3>
+                                            <VerifiedBadge 
+                                                hasCredential={credential.verified}
+                                                size="sm"
+                                                showText={false}
+                                            />
+                                            <p className="text-sm font-medium text-gray-500 mt-3">
+                                                Issued: {credential.issuedAt}
+                                            </p>
+                                            <p className="text-xs text-gray-400 truncate mt-1">
+                                                Issuer: {credential.issuer}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
+                        </div>
+                    </div>
+
+                    {/* Reputation & History */}
+                    <div className="space-y-8">
+                        {/* Reputation Card */}
+                        <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                            <h2 className="text-3xl font-black mb-6 flex items-center gap-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center">
+                                    <FiStar className="text-white text-xl" />
+                                </div>
+                                Reputation Score
+                            </h2>
+                            <div className="text-center mb-6">
+                                <div className="text-7xl font-black bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mb-3">
+                                    {profile.reputation.averageRating}
+                                </div>
+                                <div className="text-yellow-500 text-5xl mb-3">★★★★★</div>
+                                <p className="text-gray-600 text-lg font-medium">
+                                    Based on {profile.reputation.totalJobs} completed jobs
+                                </p>
+                            </div>
+                            <div className="border-t-2 border-gray-100 pt-6">
+                                <div className="flex justify-between text-lg mb-3">
+                                    <span className="text-gray-600 font-medium">Total Score</span>
+                                    <span className="font-black">{profile.reputation.totalScore}</span>
+                                </div>
+                                <div className="flex justify-between text-lg">
+                                    <span className="text-gray-600 font-medium">Jobs Completed</span>
+                                    <span className="font-black">{profile.reputation.totalJobs}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Completed Jobs */}
+                        <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                            <h2 className="text-3xl font-black mb-6 flex items-center gap-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
+                                    <FiBriefcase className="text-white text-xl" />
+                                </div>
+                                Recent Jobs
+                            </h2>
+                            <div className="space-y-4">
+                                {profile.completedJobs.map((job) => (
+                                    <div
+                                        key={job.id}
+                                        className="border-l-4 border-green-500 pl-6 py-3 bg-gradient-to-r from-green-50 to-transparent rounded-r-xl"
+                                    >
+                                        <h3 className="font-bold text-lg">{job.title}</h3>
+                                        <p className="text-sm text-gray-500 font-medium mt-1">
+                                            Completed: {job.completedAt}
+                                        </p>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <span className="text-yellow-500 text-2xl">★</span>
+                                            <span className="font-black text-lg">{job.rating}/5</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -111,57 +111,79 @@ export default function JobsPage() {
 
     if (!isConnected) {
         return (
-            <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-                <h1 className="text-3xl font-bold mb-4">Connect Your Wallet</h1>
-                <p className="text-gray-600">Please connect your wallet to view your jobs.</p>
+            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50 flex items-center justify-center px-4">
+                <div className="text-center">
+                    <div className="text-7xl mb-6">🔒</div>
+                    <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                        Connect Your Wallet
+                    </h1>
+                    <p className="text-xl text-gray-600">Please connect your wallet to view your jobs.</p>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-8">Job Management</h1>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50">
+            <div className="max-w-7xl mx-auto px-4 py-12">
+                <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    Job Management
+                </h1>
+                <p className="text-xl text-gray-600 mb-10">
+                    Track and manage all your jobs in one place
+                </p>
 
-            {/* Tabs */}
-            <div className="flex gap-4 mb-8 border-b">
-                <button
-                    onClick={() => setActiveTab('provider')}
-                    className={`px-6 py-3 font-semibold transition ${activeTab === 'provider'
-                            ? 'border-b-2 border-primary-600 text-primary-600'
-                            : 'text-gray-600 hover:text-gray-900'
-                        }`}
-                >
-                    As Provider
-                </button>
-                <button
-                    onClick={() => setActiveTab('client')}
-                    className={`px-6 py-3 font-semibold transition ${activeTab === 'client'
-                            ? 'border-b-2 border-primary-600 text-primary-600'
-                            : 'text-gray-600 hover:text-gray-900'
-                        }`}
-                >
-                    As Client
-                </button>
-            </div>
+                {/* Tabs */}
+                <div className="flex gap-2 mb-10 bg-white rounded-2xl p-2 shadow-lg border border-gray-100 w-fit">
+                    <button
+                        onClick={() => setActiveTab('provider')}
+                        className={`px-8 py-4 font-bold text-lg rounded-xl transition-all ${activeTab === 'provider'
+                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
+                                : 'text-gray-600 hover:bg-gray-50'
+                            }`}
+                    >
+                        As Provider
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('client')}
+                        className={`px-8 py-4 font-bold text-lg rounded-xl transition-all ${activeTab === 'client'
+                                ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
+                                : 'text-gray-600 hover:bg-gray-50'
+                            }`}
+                    >
+                        As Client
+                    </button>
+                </div>
 
             {/* Provider Jobs */}
             {activeTab === 'provider' && (
-                <div className="space-y-4">
+                <div className="space-y-6">
                     {providerJobs.map((job) => (
-                        <div key={job.jobId} className="bg-white rounded-lg shadow-md p-6">
-                            <div className="flex justify-between items-start mb-4">
+                        <div key={job.jobId} className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all p-8 border-2 border-transparent hover:border-indigo-200">
+                            <div className="flex justify-between items-start mb-6">
                                 <div className="flex-1">
-                                    <h3 className="text-xl font-semibold">{job.description}</h3>
-                                    <p className="text-sm text-gray-500 mb-2">Job #{job.jobId} • {job.createdAt}</p>
-                                    <ENSDisplay 
-                                        address={job.client as `0x${string}`}
-                                        className="text-xs text-gray-400"
-                                    />
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <span className="px-4 py-1 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
+                                            Job #{job.jobId}
+                                        </span>
+                                        <span className="text-gray-400">•</span>
+                                        <span className="text-gray-500">{job.createdAt}</span>
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-3">{job.description}</h3>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm font-medium text-gray-500">Client:</span>
+                                        <ENSDisplay 
+                                            address={job.client as `0x${string}`}
+                                            className="text-sm font-semibold text-gray-700"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-2xl font-bold text-primary-600">{job.price} ETH</p>
+                                    <p className="text-4xl font-black mb-3 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                        {job.price} ETH
+                                    </p>
                                     <span
-                                        className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${job.status === 'pending'
+                                        className={`inline-block px-4 py-2 rounded-xl text-sm font-bold shadow-md ${job.status === 'pending'
                                                 ? 'bg-yellow-100 text-yellow-700'
                                                 : job.status === 'accepted'
                                                     ? 'bg-blue-100 text-blue-700'
@@ -174,17 +196,19 @@ export default function JobsPage() {
                             </div>
 
                             {/* Job Timeline */}
-                            <JobTimeline 
-                                status={job.status === 'pending' ? 0 : job.status === 'accepted' ? 1 : 2}
-                                createdAt={BigInt(Math.floor(new Date(job.createdAt).getTime() / 1000))}
-                            />
+                            <div className="mb-6">
+                                <JobTimeline 
+                                    status={job.status === 'pending' ? 0 : job.status === 'accepted' ? 1 : 2}
+                                    createdAt={BigInt(Math.floor(new Date(job.createdAt).getTime() / 1000))}
+                                />
+                            </div>
 
                             {/* Actions */}
-                            <div className="flex gap-3 mt-4">
+                            <div className="flex gap-3">
                                 {job.status === 'pending' && (
                                     <button
                                         onClick={() => handleAcceptJob(job.jobId)}
-                                        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
+                                        className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-lg font-bold rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all"
                                     >
                                         Accept Job
                                     </button>
@@ -192,7 +216,7 @@ export default function JobsPage() {
                                 {job.status === 'accepted' && (
                                     <button
                                         onClick={() => handleMarkComplete(job.jobId)}
-                                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                                        className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-lg font-bold rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all"
                                     >
                                         Mark Complete
                                     </button>
@@ -205,18 +229,29 @@ export default function JobsPage() {
 
             {/* Client Jobs */}
             {activeTab === 'client' && (
-                <div className="space-y-4">
+                <div className="space-y-6">
                     {clientJobs.map((job) => (
-                        <div key={job.jobId} className="bg-white rounded-lg shadow-md p-6">
-                            <div className="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 className="text-xl font-semibold">{job.description}</h3>
-                                    <p className="text-sm text-gray-500">Job #{job.jobId} • {job.completedAt}</p>
-                                    <p className="text-xs text-gray-400 truncate">Provider: {job.provider}</p>
+                        <div key={job.jobId} className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all p-8 border-2 border-transparent hover:border-indigo-200">
+                            <div className="flex justify-between items-start mb-6">
+                                <div className="flex-1">
+                                    <div className="flex items-center gap-3 mb-3">
+                                        <span className="px-4 py-1 bg-gray-100 rounded-full text-sm font-bold text-gray-600">
+                                            Job #{job.jobId}
+                                        </span>
+                                        <span className="text-gray-400">•</span>
+                                        <span className="text-gray-500">{job.completedAt}</span>
+                                    </div>
+                                    <h3 className="text-2xl font-bold mb-3">{job.description}</h3>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm font-medium text-gray-500">Provider:</span>
+                                        <p className="text-sm font-semibold text-gray-700 truncate">{job.provider}</p>
+                                    </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-2xl font-bold text-primary-600">{job.price} ETH</p>
-                                    <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                    <p className="text-4xl font-black mb-3 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                        {job.price} ETH
+                                    </p>
+                                    <span className="inline-block px-4 py-2 rounded-xl text-sm font-bold bg-green-100 text-green-700 shadow-md">
                                         {job.status}
                                     </span>
                                 </div>
@@ -224,39 +259,40 @@ export default function JobsPage() {
 
                             {/* Release Payment */}
                             {job.status === 'completed' && (
-                                <div className="space-y-4">
+                                <div className="space-y-6">
                                     <button
                                         onClick={() => handleReleasePayment(job.jobId)}
-                                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                                        className="w-full px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-lg font-bold rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all"
                                     >
                                         Release Payment
                                     </button>
 
                                     {/* Rating Section */}
-                                    <div className="border-t pt-4">
-                                        <h4 className="font-semibold mb-2">Rate Provider</h4>
-                                        <div className="flex items-center gap-2 mb-3">
+                                    <div className="border-t-2 border-gray-100 pt-6">
+                                        <h4 className="text-xl font-bold mb-4">Rate Provider</h4>
+                                        <div className="flex items-center gap-3 mb-4">
                                             {[1, 2, 3, 4, 5].map((star) => (
                                                 <button
                                                     key={star}
                                                     onClick={() => setRatingScore(star)}
-                                                    className={`text-2xl ${star <= ratingScore ? 'text-yellow-500' : 'text-gray-300'
+                                                    className={`text-4xl transition-all transform hover:scale-125 ${star <= ratingScore ? 'text-yellow-500' : 'text-gray-300'
                                                         }`}
                                                 >
                                                     ★
                                                 </button>
                                             ))}
+                                            <span className="ml-2 text-lg font-bold text-gray-700">{ratingScore}/5</span>
                                         </div>
                                         <textarea
                                             value={review}
                                             onChange={(e) => setReview(e.target.value)}
                                             placeholder="Write a review (optional)..."
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg mb-2"
-                                            rows={3}
+                                            className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-lg"
+                                            rows={4}
                                         />
                                         <button
                                             onClick={() => handleRateProvider(job.jobId, job.provider)}
-                                            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition"
+                                            className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-lg font-bold rounded-xl hover:shadow-xl transform hover:-translate-y-1 transition-all"
                                         >
                                             Submit Rating
                                         </button>
@@ -267,6 +303,7 @@ export default function JobsPage() {
                     ))}
                 </div>
             )}
+        </div>
         </div>
     );
 }
