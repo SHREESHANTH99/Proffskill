@@ -40,7 +40,7 @@ contract SkillCredentialNFT is ERC721, ERC721URIStorage {
         uint256 timestamp
     );
     event SoulboundStatusChanged(bool isSoulbound);
-    
+
     // EIP-5192: Minimal Soulbound NFT standard
     event Locked(uint256 indexed tokenId);
 
@@ -117,7 +117,7 @@ contract SkillCredentialNFT is ERC721, ERC721URIStorage {
             _skillName,
             block.timestamp
         );
-        
+
         // EIP-5192: Emit Locked event if soulbound
         if (isSoulbound) {
             emit Locked(tokenId);
@@ -125,7 +125,7 @@ contract SkillCredentialNFT is ERC721, ERC721URIStorage {
 
         return tokenId;
     }
-    
+
     /**
      * @notice EIP-5192: Check if token is locked (Soulbound)
      * @param tokenId Token ID to check

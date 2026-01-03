@@ -6,6 +6,8 @@ import { SKILL_CREDENTIAL_NFT_ADDRESS } from '@/config/contracts';
 import { skillCredentialNFTABI } from '@/config/abis';
 import { uploadToIPFS } from '@/utils/ipfs';
 
+export const dynamic = 'force-dynamic';
+
 export default function IssuerPage() {
     const { address } = useAccount();
     const { writeContract } = useWriteContract();

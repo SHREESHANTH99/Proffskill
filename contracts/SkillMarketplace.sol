@@ -223,7 +223,7 @@ contract SkillMarketplace is ReentrancyGuard {
 
         emit JobCancelled(_jobId, block.timestamp);
     }
-    
+
     /**
      * @notice Provider can auto-claim payment if client doesn't act within dispute window
      * @param _jobId Job ID to claim payment for
@@ -306,7 +306,7 @@ contract SkillMarketplace is ReentrancyGuard {
             serviceListings[_listingId]
         );
     }
-    
+
     /**
      * @notice Get comprehensive user profile data (gas-optimized batch read)
      * @param _user Address to get profile for
@@ -331,7 +331,7 @@ contract SkillMarketplace is ReentrancyGuard {
             providerListings[_user]
         );
     }
-    
+
     /**
      * @notice Get multiple jobs in one call (gas-optimized)
      * @param _jobIds Array of job IDs to fetch

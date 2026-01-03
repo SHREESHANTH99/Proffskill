@@ -63,12 +63,11 @@ export default function JobTimeline({
       <div className="relative">
         {/* Progress Bar Background */}
         <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200" />
-        
+
         {/* Progress Bar Fill */}
         <div
-          className={`absolute top-5 left-0 h-0.5 transition-all duration-500 ${
-            status === 4 ? "bg-red-500" : "bg-green-500"
-          }`}
+          className={`absolute top-5 left-0 h-0.5 transition-all duration-500 ${status === 4 ? "bg-red-500" : "bg-green-500"
+            }`}
           style={{ width: `${(Math.min(status, 3) / 3) * 100}%` }}
         />
 
@@ -82,15 +81,14 @@ export default function JobTimeline({
               <div key={step.label} className="flex flex-col items-center">
                 {/* Icon Circle */}
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
-                    stepStatus === "completed"
+                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${stepStatus === "completed"
                       ? "bg-green-500 text-white"
                       : stepStatus === "current"
-                      ? "bg-blue-500 text-white animate-pulse"
-                      : stepStatus === "cancelled"
-                      ? "bg-red-500 text-white"
-                      : "bg-gray-200 text-gray-400"
-                  }`}
+                        ? "bg-blue-500 text-white animate-pulse"
+                        : stepStatus === "cancelled"
+                          ? "bg-red-500 text-white"
+                          : "bg-gray-200 text-gray-400"
+                    }`}
                 >
                   {stepStatus === "completed" || stepStatus === "cancelled" ? (
                     <Icon className="w-6 h-6" />
@@ -104,11 +102,10 @@ export default function JobTimeline({
                 {/* Label */}
                 <div className="mt-2 text-center">
                   <p
-                    className={`text-sm font-medium ${
-                      stepStatus === "completed" || stepStatus === "current"
+                    className={`text-sm font-medium ${stepStatus === "completed" || stepStatus === "current"
                         ? "text-gray-900"
                         : "text-gray-400"
-                    }`}
+                      }`}
                   >
                     {step.label}
                   </p>
@@ -140,12 +137,12 @@ export default function JobTimeline({
               {status === 0
                 ? "Pending Acceptance"
                 : status === 1
-                ? "Accepted - In Progress"
-                : status === 2
-                ? "Completed - Awaiting Payment"
-                : status === 3
-                ? "Paid & Rated"
-                : "Cancelled"}
+                  ? "Accepted - In Progress"
+                  : status === 2
+                    ? "Completed - Awaiting Payment"
+                    : status === 3
+                      ? "Paid & Rated"
+                      : "Cancelled"}
             </p>
           </div>
           <div>

@@ -69,7 +69,7 @@ export default function ProfilePage() {
                             <h1 className="text-4xl font-black mb-3 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                                 Profile
                             </h1>
-                            <ENSDisplay 
+                            <ENSDisplay
                                 address={address as `0x${string}`}
                                 showFull={true}
                                 className="text-gray-600 mb-6 font-mono text-lg"
@@ -118,7 +118,7 @@ export default function ProfilePage() {
                                     <div className="flex items-start justify-between">
                                         <div className="flex-1">
                                             <h3 className="font-bold text-xl mb-3">{credential.skillName}</h3>
-                                            <VerifiedBadge 
+                                            <VerifiedBadge
                                                 hasCredential={credential.verified}
                                                 size="sm"
                                                 showText={false}

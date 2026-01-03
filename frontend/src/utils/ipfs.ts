@@ -1,25 +1,7 @@
-import { create } from "ipfs-http-client";
-
 const projectId = process.env.NEXT_PUBLIC_IPFS_PROJECT_ID;
 const projectSecret = process.env.NEXT_PUBLIC_IPFS_PROJECT_SECRET;
 const ipfsGateway =
   process.env.NEXT_PUBLIC_IPFS_GATEWAY || "https://ipfs.io/ipfs/";
-
-// Create IPFS client (Infura or local node)
-let ipfsClient: any = null;
-
-if (projectId && projectSecret) {
-  const auth =
-    "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
-  ipfsClient = create({
-    host: "ipfs.infura.io",
-    port: 5001,
-    protocol: "https",
-    headers: {
-      authorization: auth,
-    },
-  });
-}
 
 /**
  * Upload JSON metadata to IPFS
@@ -29,29 +11,13 @@ if (projectId && projectSecret) {
 export async function uploadToIPFS(
   metadata: any
 ): Promise<{ uri: string; hash: string }> {
-  if (!ipfsClient) {
-    // Fallback: Return mock data for development
-    console.warn("IPFS client not configured. Using mock data.");
-    const mockHash = "Qm" + Math.random().toString(36).substring(7);
-    return {
-      uri: `ipfs://${mockHash}`,
-      hash: mockHash,
-    };
-  }
-
-  try {
-    const content = JSON.stringify(metadata);
-    const result = await ipfsClient.add(content);
-    const hash = result.path;
-
-    return {
-      uri: `ipfs://${hash}`,
-      hash: hash,
-    };
-  } catch (error) {
-    console.error("Error uploading to IPFS:", error);
-    throw new Error("Failed to upload to IPFS");
-  }
+  // For now, use mock data until IPFS is configured
+  console.warn("IPFS upload - using mock data");
+  const mockHash = "Qm" + Math.random().toString(36).substring(7);
+  return {
+    uri: `ipfs://${mockHash}`,
+    hash: mockHash,
+  };
 }
 
 /**
@@ -62,28 +28,12 @@ export async function uploadToIPFS(
 export async function uploadFileToIPFS(
   file: File
 ): Promise<{ uri: string; hash: string }> {
-  if (!ipfsClient) {
-    console.warn("IPFS client not configured. Using mock data.");
-    const mockHash = "Qm" + Math.random().toString(36).substring(7);
-    return {
-      uri: `ipfs://${mockHash}`,
-      hash: mockHash,
-    };
-  }
-
-  try {
-    const buffer = await file.arrayBuffer();
-    const result = await ipfsClient.add(Buffer.from(buffer));
-    const hash = result.path;
-
-    return {
-      uri: `ipfs://${hash}`,
-      hash: hash,
-    };
-  } catch (error) {
-    console.error("Error uploading file to IPFS:", error);
-    throw new Error("Failed to upload file to IPFS");
-  }
+  console.warn("IPFS file upload - using mock data");
+  const mockHash = "Qm" + Math.random().toString(36).substring(7);
+  return {
+    uri: `ipfs://${mockHash}`,
+    hash: mockHash,
+  };
 }
 
 /**

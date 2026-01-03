@@ -14,7 +14,7 @@ export default function HomePage() {
                     <div className="absolute top-10 left-10 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
                     <div className="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
                 </div>
-                
+
                 <div className="max-w-6xl mx-auto text-center relative z-10">
                     <div className="inline-block animate-bounce mb-6">
                         <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto shadow-2xl">
@@ -41,7 +41,7 @@ export default function HomePage() {
                             Explore Marketplace <span className="text-xl">→</span>
                         </Link>
                     </div>
-                    
+
                     {/* Stats Grid */}
                     <div className="mt-20 grid grid-cols-3 gap-6 max-w-4xl mx-auto">
                         <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 shadow-xl hover:bg-white/20 transition">

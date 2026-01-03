@@ -95,7 +95,7 @@ export default function MarketplacePage() {
                                     </span>
                                 </div>
                                 <div className="flex-1 overflow-hidden">
-                                    <ENSDisplay 
+                                    <ENSDisplay
                                         address={service.provider as `0x${string}`}
                                         className="text-sm text-gray-600 font-medium truncate"
                                     />
@@ -112,7 +112,7 @@ export default function MarketplacePage() {
 
                             {/* Verified Credentials Badge */}
                             <div className="mb-6">
-                                <VerifiedBadge 
+                                <VerifiedBadge
                                     hasCredential={true}
                                     skillName={service.skill}
                                     size="sm"

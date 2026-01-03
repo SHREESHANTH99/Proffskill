@@ -5,6 +5,8 @@ import { useAccount, useReadContract, useWriteContract } from 'wagmi';
 import { ADMIN_ADDRESS, ISSUER_REGISTRY_ADDRESS } from '@/config/contracts';
 import { issuerRegistryABI } from '@/config/abis';
 
+export const dynamic = 'force-dynamic';
+
 export default function AdminPage() {
     const { address } = useAccount();
     const [issuerAddress, setIssuerAddress] = useState('');

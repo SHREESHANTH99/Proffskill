@@ -109,7 +109,7 @@ contract Reputation {
         // Update provider stats (traditional)
         totalScore[job.provider] += _score;
         totalJobs[job.provider] += 1;
-        
+
         // Update weighted stats (economic value-based)
         totalJobValue[job.provider] += job.price;
         weightedScore[job.provider] += (_score * job.price);
@@ -144,10 +144,12 @@ contract Reputation {
         uint256 jobs = totalJobs[_provider];
         uint256 score = totalScore[_provider];
         uint256 average = jobs > 0 ? (score * 100) / jobs : 0;
-        
+
         // Calculate value-weighted average
         uint256 jobValue = totalJobValue[_provider];
-        uint256 weighted = jobValue > 0 ? (weightedScore[_provider] * 100) / jobValue : 0;
+        uint256 weighted = jobValue > 0
+            ? (weightedScore[_provider] * 100) / jobValue
+            : 0;
 
         return
             ProviderStats({
