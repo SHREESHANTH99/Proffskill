@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-249246875a9395fc2fc154b6dca36b63904c3c7e",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/IssuerRegistry.sol": "project/contracts/IssuerRegistry.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/IssuerRegistry.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.20;\r\n\r\n/**\r\n * @title IssuerRegistry\r\n * @notice Controls who is allowed to issue credentials on the ProofSkill platform\r\n * @dev Admin-only contract that manages trusted credential issuers\r\n */\r\ncontract IssuerRegistry {\r\n    // State Variables\r\n    address public admin;\r\n    mapping(address => bool) public issuers;\r\n\r\n    // Events\r\n    event IssuerAdded(address indexed issuer, uint256 timestamp);\r\n    event IssuerRemoved(address indexed issuer, uint256 timestamp);\r\n    event AdminTransferred(\r\n        address indexed previousAdmin,\r\n        address indexed newAdmin\r\n    );\r\n\r\n    // Modifiers\r\n    modifier onlyAdmin() {\r\n        require(msg.sender == admin, \"IssuerRegistry: caller is not admin\");\r\n        _;\r\n    }\r\n\r\n    modifier validAddress(address _address) {\r\n        require(_address != address(0), \"IssuerRegistry: invalid address\");\r\n        _;\r\n    }\r\n\r\n    // Constructor\r\n    constructor() {\r\n        admin = msg.sender;\r\n        emit AdminTransferred(address(0), msg.sender);\r\n    }\r\n\r\n    /**\r\n     * @notice Add a new trusted issuer (Admin only)\r\n     * @param _issuer Address of the issuer to add\r\n     */\r\n    function addIssuer(\r\n        address _issuer\r\n    ) external onlyAdmin validAddress(_issuer) {\r\n        require(!issuers[_issuer], \"IssuerRegistry: issuer already exists\");\r\n        require(_issuer != admin, \"IssuerRegistry: admin cannot be issuer\");\r\n\r\n        issuers[_issuer] = true;\r\n        emit IssuerAdded(_issuer, block.timestamp);\r\n    }\r\n\r\n    /**\r\n     * @notice Remove an issuer (Admin only)\r\n     * @param _issuer Address of the issuer to remove\r\n     */\r\n    function removeIssuer(\r\n        address _issuer\r\n    ) external onlyAdmin validAddress(_issuer) {\r\n        require(issuers[_issuer], \"IssuerRegistry: issuer does not exist\");\r\n\r\n        issuers[_issuer] = false;\r\n        emit IssuerRemoved(_issuer, block.timestamp);\r\n    }\r\n\r\n    /**\r\n     * @notice Verify if an address is an approved issuer\r\n     * @param _issuer Address to verify\r\n     * @return bool True if the address is an approved issuer\r\n     */\r\n    function isApprovedIssuer(address _issuer) external view returns (bool) {\r\n        return issuers[_issuer];\r\n    }\r\n\r\n    /**\r\n     * @notice Transfer admin role to a new address\r\n     * @param _newAdmin Address of the new admin\r\n     */\r\n    function transferAdmin(\r\n        address _newAdmin\r\n    ) external onlyAdmin validAddress(_newAdmin) {\r\n        require(_newAdmin != admin, \"IssuerRegistry: already admin\");\r\n\r\n        address previousAdmin = admin;\r\n        admin = _newAdmin;\r\n\r\n        emit AdminTransferred(previousAdmin, _newAdmin);\r\n    }\r\n\r\n    /**\r\n     * @notice Get the current admin address\r\n     * @return address Current admin\r\n     */\r\n    function getAdmin() external view returns (address) {\r\n        return admin;\r\n    }\r\n}\r\n"
+      }
+    }
+  }
+}

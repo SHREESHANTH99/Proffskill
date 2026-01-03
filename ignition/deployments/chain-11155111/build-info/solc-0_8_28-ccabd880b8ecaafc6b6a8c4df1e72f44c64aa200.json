@@ -1,0 +1,39 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-ccabd880b8ecaafc6b6a8c4df1e72f44c64aa200",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "userSourceNameMap": {
+    "contracts/Reputation.sol": "project/contracts/Reputation.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode",
+            "evm.deployedBytecode",
+            "evm.methodIdentifiers",
+            "metadata"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/Reputation.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.20;\r\n\r\ninterface ISkillMarketplace {\r\n    struct Job {\r\n        address provider;\r\n        address client;\r\n        uint256 price;\r\n        uint8 status;\r\n        uint40 createdAt;\r\n    }\r\n\r\n    function jobs(uint256) external view returns (Job memory);\r\n}\r\n\r\n/**\r\n * @title Reputation\r\n * @notice On-chain reputation system for service providers\r\n * @dev Tracks ratings and prevents duplicate ratings per job\r\n */\r\ncontract Reputation {\r\n    // State Variables\r\n    ISkillMarketplace public marketplace;\r\n\r\n    // Rating data\r\n    mapping(address => uint256) public totalScore;\r\n    mapping(address => uint256) public totalJobs;\r\n    mapping(uint256 => bool) public jobRated; // Prevent duplicate ratings\r\n    mapping(uint256 => Rating) public jobRatings;\r\n\r\n    // Rating structure\r\n    struct Rating {\r\n        uint256 jobId;\r\n        address provider;\r\n        address client;\r\n        uint8 score; // 1-5 stars\r\n        string review;\r\n        uint256 timestamp;\r\n    }\r\n\r\n    // Provider stats\r\n    struct ProviderStats {\r\n        uint256 totalScore;\r\n        uint256 totalJobs;\r\n        uint256 averageRating; // Scaled by 100 (e.g., 450 = 4.50 stars)\r\n    }\r\n\r\n    // Events\r\n    event ProviderRated(\r\n        uint256 indexed jobId,\r\n        address indexed provider,\r\n        address indexed client,\r\n        uint8 score,\r\n        uint256 timestamp\r\n    );\r\n\r\n    // Modifiers\r\n    modifier validRating(uint8 _score) {\r\n        require(\r\n            _score >= 1 && _score <= 5,\r\n            \"Reputation: rating must be between 1 and 5\"\r\n        );\r\n        _;\r\n    }\r\n\r\n    /**\r\n     * @notice Constructor\r\n     * @param _marketplace Address of the SkillMarketplace contract\r\n     */\r\n    constructor(address _marketplace) {\r\n        require(\r\n            _marketplace != address(0),\r\n            \"Reputation: invalid marketplace address\"\r\n        );\r\n        marketplace = ISkillMarketplace(_marketplace);\r\n    }\r\n\r\n    /**\r\n     * @notice Rate a provider after job completion\r\n     * @param _jobId Job ID to rate\r\n     * @param _score Rating score (1-5)\r\n     * @param _review Optional review text\r\n     */\r\n    function rateProvider(\r\n        uint256 _jobId,\r\n        uint8 _score,\r\n        string memory _review\r\n    ) external validRating(_score) {\r\n        // Prevent duplicate ratings\r\n        require(!jobRated[_jobId], \"Reputation: job already rated\");\r\n\r\n        // Get job details from marketplace\r\n        ISkillMarketplace.Job memory job = marketplace.jobs(_jobId);\r\n\r\n        // Validate rating conditions\r\n        // status: 0=pending, 1=accepted, 2=completed, 3=paid, 4=cancelled\r\n        require(job.status == 3, \"Reputation: job not paid\");\r\n        require(msg.sender == job.client, \"Reputation: only client can rate\");\r\n        require(job.provider != address(0), \"Reputation: invalid job\");\r\n\r\n        // Mark job as rated\r\n        jobRated[_jobId] = true;\r\n\r\n        // Update provider stats\r\n        totalScore[job.provider] += _score;\r\n        totalJobs[job.provider] += 1;\r\n\r\n        // Store rating details\r\n        jobRatings[_jobId] = Rating({\r\n            jobId: _jobId,\r\n            provider: job.provider,\r\n            client: job.client,\r\n            score: _score,\r\n            review: _review,\r\n            timestamp: block.timestamp\r\n        });\r\n\r\n        emit ProviderRated(\r\n            _jobId,\r\n            job.provider,\r\n            job.client,\r\n            _score,\r\n            block.timestamp\r\n        );\r\n    }\r\n\r\n    /**\r\n     * @notice Get provider's reputation stats\r\n     * @param _provider Provider address\r\n     * @return ProviderStats struct with total score, jobs, and average rating\r\n     */\r\n    function getProviderStats(\r\n        address _provider\r\n    ) external view returns (ProviderStats memory) {\r\n        uint256 jobs = totalJobs[_provider];\r\n        uint256 score = totalScore[_provider];\r\n        uint256 average = jobs > 0 ? (score * 100) / jobs : 0;\r\n\r\n        return\r\n            ProviderStats({\r\n                totalScore: score,\r\n                totalJobs: jobs,\r\n                averageRating: average\r\n            });\r\n    }\r\n\r\n    /**\r\n     * @notice Get average rating for a provider\r\n     * @param _provider Provider address\r\n     * @return uint256 Average rating scaled by 100 (e.g., 450 = 4.50 stars)\r\n     */\r\n    function getAverageRating(\r\n        address _provider\r\n    ) external view returns (uint256) {\r\n        if (totalJobs[_provider] == 0) {\r\n            return 0;\r\n        }\r\n        return (totalScore[_provider] * 100) / totalJobs[_provider];\r\n    }\r\n\r\n    /**\r\n     * @notice Check if a job has been rated\r\n     * @param _jobId Job ID\r\n     * @return bool True if job has been rated\r\n     */\r\n    function isJobRated(uint256 _jobId) external view returns (bool) {\r\n        return jobRated[_jobId];\r\n    }\r\n\r\n    /**\r\n     * @notice Get rating details for a specific job\r\n     * @param _jobId Job ID\r\n     * @return Rating struct\r\n     */\r\n    function getJobRating(\r\n        uint256 _jobId\r\n    ) external view returns (Rating memory) {\r\n        require(jobRated[_jobId], \"Reputation: job not rated\");\r\n        return jobRatings[_jobId];\r\n    }\r\n\r\n    /**\r\n     * @notice Get total number of completed jobs for a provider\r\n     * @param _provider Provider address\r\n     * @return uint256 Total jobs completed\r\n     */\r\n    function getTotalJobs(address _provider) external view returns (uint256) {\r\n        return totalJobs[_provider];\r\n    }\r\n\r\n    /**\r\n     * @notice Get total reputation score for a provider\r\n     * @param _provider Provider address\r\n     * @return uint256 Total cumulative score\r\n     */\r\n    function getTotalScore(address _provider) external view returns (uint256) {\r\n        return totalScore[_provider];\r\n    }\r\n}\r\n"
+      }
+    }
+  }
+}
